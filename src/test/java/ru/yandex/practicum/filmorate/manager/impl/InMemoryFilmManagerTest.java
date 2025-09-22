@@ -7,8 +7,10 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.manager.FilmManager;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.validator.FilmValidator;
+
 import java.time.LocalDate;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InMemoryFilmManagerTest {
@@ -25,7 +27,7 @@ public class InMemoryFilmManagerTest {
         testFilmForCreate.setDuration(94);
         testFilmForCreate.setReleaseDate(LocalDate.of(1998, 1, 4));
         testFilmForUpdate = new Film();
-        testFilmForUpdate.setId(0L);
+        testFilmForUpdate.setId(1L);
         testFilmForUpdate.setName("Третье пространство");
         testFilmForUpdate.setDescription("Продолжение 4 сезона Вавилона 5");
         testFilmForUpdate.setDuration(94);
@@ -52,7 +54,7 @@ public class InMemoryFilmManagerTest {
         List<Film> films = manager.list();
         assertNotNull(films);
         assertEquals(1, films.size());
-        assertEquals(0, films.get(0).getId());
+        assertEquals(1, films.get(0).getId());
     }
 
     @Test
@@ -63,7 +65,7 @@ public class InMemoryFilmManagerTest {
         List<Film> films = manager.list();
         assertNotNull(films);
         assertEquals(2, films.size());
-        assertEquals(1, films.get(1).getId());
+        assertEquals(2, films.get(1).getId());
     }
 
     @Test

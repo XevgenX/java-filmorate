@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.manager.impl;
 
 import ru.yandex.practicum.filmorate.exception.ValidationException;
+
 import java.util.Map;
 import java.util.Optional;
 
@@ -15,6 +16,6 @@ public abstract class AbstractInMemoryManager<M> {
 
     protected Long generateNextId() {
         Optional<Long> maxId = getStorage().keySet().stream().max(Long::compareTo);
-        return maxId.map(max -> max + 1).orElse(0L);
+        return maxId.map(max -> max + 1).orElse(1L);
     }
 }

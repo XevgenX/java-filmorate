@@ -28,7 +28,7 @@ public class InMemoryUserManagerTest {
         testUserForCreate.setEmail("evgen@gmail.com");
         testUserForCreate.setBirthday(LocalDate.of(1985, 10, 11));
         testUserForUpdate = new User();
-        testUserForUpdate.setId(0L);
+        testUserForUpdate.setId(1L);
         testUserForUpdate.setName("Eugeniy");
         testUserForUpdate.setLogin("eugen");
         testUserForUpdate.setEmail("eugen@yandex.ru");
@@ -63,7 +63,7 @@ public class InMemoryUserManagerTest {
         manager.create(testUserForCreate);
         List<User> users = manager.list();
         assertEquals(1, users.size());
-        assertEquals(0, users.get(0).getId());
+        assertEquals(1, users.get(0).getId());
     }
 
     @Test
@@ -73,7 +73,7 @@ public class InMemoryUserManagerTest {
         manager.create(testUserForCreate);
         List<User> users = manager.list();
         assertEquals(2, users.size());
-        assertEquals(1, users.get(1).getId());
+        assertEquals(2, users.get(1).getId());
     }
 
     @Test
