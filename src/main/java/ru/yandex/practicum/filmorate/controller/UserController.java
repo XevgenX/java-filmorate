@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.validator.UserValidator;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     private final UserManager manager;
 
