@@ -4,7 +4,7 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import java.util.Map;
 import java.util.Optional;
 
-public abstract class AbstractInMemoryManager <M> {
+public abstract class AbstractInMemoryManager<M> {
     protected abstract Map<Long, M> getStorage();
 
     protected void validateIdForUpdate(Long id) {
