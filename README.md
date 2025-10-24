@@ -1,3 +1,3 @@
 # java-filmorate
 ## Модель данных
-![](filmorate(1).jpg)
+![](filmorate (1).jpg)
