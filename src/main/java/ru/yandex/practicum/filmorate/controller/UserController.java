@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.model.FriendshipStatus;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validator.IdValidator;
@@ -33,7 +34,7 @@ public class UserController {
         idValidator.validate(id);
         return userService.getById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь с таким id не найден"))
-                .getFriends().stream()
+                .getFriends().keySet().stream()
                 .filter(uid -> userService.getById(uid).isPresent())
                 .map(uid -> userService.getById(uid).get())
                 .toList();
@@ -53,8 +54,7 @@ public class UserController {
     public void makeFriendship(@PathVariable Long id, @PathVariable Long friendId) {
         idValidator.validate(id);
         idValidator.validate(friendId);
-        userService.makeFriendship(id, friendId);
-        System.out.println("");
+        userService.makeFriendship(id, friendId, FriendshipStatus.NEW);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")

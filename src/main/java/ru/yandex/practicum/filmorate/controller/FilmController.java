@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/films")
+@RequiredArgsConstructor
 public class FilmController {
     private static final int TOP_LIKED_FILM_MAX_COUNT = 10;
     private final FilmService filmService;
