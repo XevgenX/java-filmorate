@@ -7,13 +7,16 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.impl.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.service.GenreService;
+import ru.yandex.practicum.filmorate.service.MpaService;
+import ru.yandex.practicum.filmorate.storage.in_memory_impl.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.validator.FilmValidator;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 public class FilmServiceTest {
     private FilmService service;
@@ -22,7 +25,7 @@ public class FilmServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new FilmService(new InMemoryFilmStorage(), new FilmValidator());
+        service = new FilmService(new InMemoryFilmStorage(), mock(MpaService.class), new FilmValidator(mock(MpaService.class), mock(GenreService.class)));
         testFilmForCreate = new Film();
         testFilmForCreate.setName("Вначале");
         testFilmForCreate.setDescription("Приквел Вавилона 5");

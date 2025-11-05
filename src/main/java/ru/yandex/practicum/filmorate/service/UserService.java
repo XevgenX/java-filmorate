@@ -1,9 +1,10 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.model.FriendshipStatus;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.validator.UserValidator;
@@ -11,11 +12,15 @@ import ru.yandex.practicum.filmorate.validator.UserValidator;
 import java.util.*;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
 public class UserService {
     private final UserStorage storage;
     private final UserValidator validator;
+
+    public UserService(@Qualifier("user_storage_db_impl") UserStorage storage, UserValidator validator) {
+        this.storage = storage;
+        this.validator = validator;
+    }
 
     public List<User> list() {
         return storage.findAll();
@@ -41,26 +46,20 @@ public class UserService {
         return storage.save(user);
     }
 
-    public void makeFriendship(Long firstUserId, Long secondUserId) {
-        User firstUser = storage.findById(firstUserId).orElseThrow(() -> new NotFoundException("Не найден пользователь с таким id"));
-        User secondUser = storage.findById(secondUserId).orElseThrow(() -> new NotFoundException("Не найден пользователь с таким id"));
-        firstUser.addFriend(secondUserId);
-        secondUser.addFriend(firstUserId);
+    public void makeFriendship(Long firstUserId, Long secondUserId, FriendshipStatus status) {
+        storage.makeFriendship(firstUserId, secondUserId, status);
     }
 
     public void ruinFriendship(Long firstUserId, Long secondUserId) {
-        User firstUser = storage.findById(firstUserId).orElseThrow(() -> new NotFoundException("Не найден пользователь с таким id"));
-        User secondUser = storage.findById(secondUserId).orElseThrow(() -> new NotFoundException("Не найден пользователь с таким id"));
-        firstUser.removeFriend(secondUserId);
-        secondUser.removeFriend(firstUserId);
+        storage.ruinFriendship(firstUserId, secondUserId);
     }
 
     public Collection<User> findCommonFriends(Long firstUserId, Long secondUserId) {
         User firstUser = storage.findById(firstUserId).orElseThrow(() -> new NotFoundException("Не найден пользователь с таким id"));
         User secondUser = storage.findById(secondUserId).orElseThrow(() -> new NotFoundException("Не найден пользователь с таким id"));
         Set<User> commonFriends = new HashSet<>();
-        Set<Long> firstUserFriends = firstUser.getFriends();
-        Set<Long> secondUserFriends = secondUser.getFriends();
+        Set<Long> firstUserFriends = firstUser.getFriends().keySet();
+        Set<Long> secondUserFriends = secondUser.getFriends().keySet();
         commonFriends.addAll(firstUserFriends.stream()
                 .filter(friend -> secondUserFriends.contains(friend))
                 .filter(id -> storage.findById(id).isPresent())

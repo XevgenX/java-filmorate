@@ -2,8 +2,8 @@ package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 public class User implements AbstractModel {
@@ -12,10 +12,10 @@ public class User implements AbstractModel {
     private String login;
     private String name;
     private LocalDate birthday;
-    private Set<Long> friends = new HashSet<>();
+    private Map<Long, FriendshipStatus> friends = new HashMap<>();
 
-    public void addFriend(Long id) {
-        friends.add(id);
+    public void addFriend(Long id, FriendshipStatus status) {
+        friends.put(id, status);
     }
 
     public void removeFriend(Long id) {
