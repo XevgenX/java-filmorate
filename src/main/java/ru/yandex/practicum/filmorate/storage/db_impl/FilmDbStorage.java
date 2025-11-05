@@ -8,7 +8,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.db_impl.mapper.FilmWithConnectedDataExtractor;
@@ -17,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Qualifier("film_storage_db_impl")
 @Repository
@@ -140,8 +140,11 @@ public class FilmDbStorage implements FilmStorage {
 
     private void processGenres(Film film) {
         jdbcTemplate.update(REMOVE_GENRES, film.getId());
-        for (Genre genre : film.getGenres()) {
-            jdbcTemplate.update(SAVE_GENRE_QUERY, film.getId(), genre.getId());
+        List<Object[]> genres = film.getGenres().stream()
+                .map(genre -> new Object[]{film.getId(), genre.getId()})
+                .collect(Collectors.toList());
+        if (!genres.isEmpty()) {
+            jdbcTemplate.batchUpdate(SAVE_GENRE_QUERY, genres);
         }
     }
 }
